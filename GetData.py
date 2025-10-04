@@ -2,6 +2,7 @@ import requests
 from base64 import b64encode
 import csv
 import datetime
+from geopy.geocoders import Nominatim
 
 
 def get_token(username, password) -> str:
@@ -23,7 +24,8 @@ def get_token(username, password) -> str:
     return token
 
 def convert_to_dataset(datatype):
-    dataDict = {'RecentRain':'is_rain_30min:idx', 'Wind':'wind_speed_2m:kmh'}
+    dataDict = {'Precipitation':'precip_1h:mm', 'Wind':'wind_speed_2m:kmh', 'Temperature':'t_apparent_mean_1h:C', 'Humidity':'absolute_humidity_2m:gm3'}
+    return dataDict[datatype]
 
 
 
@@ -32,11 +34,13 @@ def date_formatting(date_from,date_to):
     time_frame = time_frame.replace(" ","T")
     return time_frame
 
-def make_url(username,password,token,date_from,date_to):
-    url = f"https://{username}:{password}@api.meteomatics.com/{date_formatting(date_from,date_to)}/precip_24h:mm/51.11,10.2/csv?access_token={token}"
+def make_url(username,password,token,date_from,date_to,datatype):
+    url = f"https://{username}:{password}@api.meteomatics.com/{date_formatting(date_from,date_to)}/{convert_to_dataset(datatype)}/51.11,10.2/csv?access_token={token}"
     return url
 
-
+def get_lon_lat(location)
+    geolocator = Nominatim(user_agent="Climate-Coders")
+    location = geolocator.geocode("Paris")
 
 if __name__ == '__main__':
     def write_test_data(data: str, filename: str="test_data.txt") -> None:
@@ -57,7 +61,7 @@ if __name__ == '__main__':
 
     # If there is not a new URL, for testing purposes this should be False to speed things up
     NEW_URL = True
-    URL = make_url(USERNAME,PASSWORD,TOKEN,datetime.datetime(2020,10,10),datetime.datetime(2024,3,7))
+    URL = make_url(USERNAME,PASSWORD,TOKEN,datetime.datetime(2020,10,10),datetime.datetime(2024,3,7),"Precipitation")
     print(URL)
     if NEW_URL:
         result = requests.get(URL).text
@@ -66,4 +70,6 @@ if __name__ == '__main__':
     
     #data = read_test_data()
     #print(data)
+    
+    
 
