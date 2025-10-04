@@ -34,6 +34,10 @@ if __name__ == '__main__':
         return lines
 
 
+    USERNAME = 'gurney_nicholas' 
+    PASSWORD = 'y51m14AbCgT7m4F6l235'
+    get_Token(USERNAME, PASSWORD)
+    
     USERNAME = "lockie_sam"
     PASSWORD = "1fy6pJqE401w2OoAK1WR"
     TOKEN = get_token(username=USERNAME, password=PASSWORD)
