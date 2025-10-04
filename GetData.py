@@ -22,6 +22,11 @@ def get_token(username, password) -> str:
         raise ValueError(f"No access_token in response: {data}")
     return token
 
+def convert_to_dataset(datatype):
+    dataDict = {'RecentRain':'is_rain_30min:idx', 'Wind':'wind_speed_2m:kmh'}
+
+
+
 def date_formatting(date_from,date_to):
     time_frame = str(date_from)+"Z" + "--" + str(date_to)+"Z"
     time_frame = time_frame.replace(" ","T")
