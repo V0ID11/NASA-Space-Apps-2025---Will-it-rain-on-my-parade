@@ -34,13 +34,23 @@ def date_formatting(date_from,date_to):
     time_frame = time_frame.replace(" ","T")
     return time_frame
 
-def make_url(username,password,token,date_from,date_to,datatype):
-    url = f"https://{username}:{password}@api.meteomatics.com/{date_formatting(date_from,date_to)}/{convert_to_dataset(datatype)}/51.11,10.2/csv?access_token={token}"
+def make_url(username,password,token,date_from,date_to,datatype, location):
+    location=get_lon_lat(location)
+    location = create_lon_lat_rectangle(location[0],location[1])
+    url = f"https://{username}:{password}@api.meteomatics.com/{date_formatting(date_from,date_to)}/{convert_to_dataset(datatype)}/{location[0]},{location[1]}_{location[2]},{location[3]}:10x10/csv?access_token={token}"
     return url
 
-def get_lon_lat(location)
+def get_lon_lat(location):
     geolocator = Nominatim(user_agent="Climate-Coders")
-    location = geolocator.geocode("Paris")
+    location = geolocator.geocode(location)
+    return location.longitude,location.latitude
+
+def create_lon_lat_rectangle(longitude, latitude):
+    min_long = longitude - 0.25
+    max_long = longitude + 0.25
+    min_lat =  latitude - 0.25 
+    max_lat = latitude + 0.25
+    return max_lat,min_long,  min_lat,max_long
 
 if __name__ == '__main__':
     def write_test_data(data: str, filename: str="test_data.txt") -> None:
@@ -61,7 +71,7 @@ if __name__ == '__main__':
 
     # If there is not a new URL, for testing purposes this should be False to speed things up
     NEW_URL = True
-    URL = make_url(USERNAME,PASSWORD,TOKEN,datetime.datetime(2020,10,10),datetime.datetime(2024,3,7),"Precipitation")
+    URL = make_url(USERNAME,PASSWORD,TOKEN,datetime.datetime(2020,10,10),datetime.datetime(2024,3,7),"Precipitation","Paris")
     print(URL)
     if NEW_URL:
         result = requests.get(URL).text
