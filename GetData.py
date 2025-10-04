@@ -1,31 +1,55 @@
 import requests
 from base64 import b64encode
+import csv
 
 
-def basic_auth(username, password):
-    token = b64encode(f"{username}:{password}".encode('utf-8')).decode("ascii")
-    return f'Basic {token}'
+def get_token(username, password) -> str:
+    # Build Basic Auth header manually (requests can also do this for you)
+    credentials = f"{username}:{password}"
+    encoded = b64encode(credentials.encode("utf-8")).decode("ascii")
+    headers = {
+        "Authorization": f"Basic {encoded}",
+        "Accept": "application/json",
+    }
 
-def get_Token(username, password):
-    headers = { 'Authorization' :basic_auth(username,password) }
- 
-    response = requests.get('https://login.meteomatics.com/api/v1/token/',headers=headers)
-
-    token = response.json()
-    
-    print(token)
-
-
+    url = 'https://login.meteomatics.com/api/v1/token'
+    resp = requests.get(url, headers=headers, timeout=10)
+    resp.raise_for_status()  # raise HTTPError for 4xx/5xx
+    data = resp.json()
+    token = data.get("access_token")
+    if not token:
+        raise ValueError(f"No access_token in response: {data}")
+    return token
 
 
 if __name__ == '__main__':
-    TOKEN = 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2IjoxLCJ1c2VyIjoiZ3VybmV5X25pY2hvbGFzIiwiaXNzIjoibG9naW4ubWV0ZW9tYXRpY3MuY29tIiwiZXhwIjoxNzU5NTczNDUwLCJzdWIiOiJhY2Nlc3MifQ.moa33aZJnX0MFI7uIebrGntK5VIgfHKVlD3PmIBPyAyocVxSN0RPXhw_GaVywX1esboVrCv_MmmCTUDJ9ORusw'
+    def write_test_data(data: str, filename: str="test_data.txt") -> None:
+        with open(filename, "w") as f:
+            f.write(data)
+    
+    def read_test_data(filename: str = "test_data.txt") -> list[str]:
+        with open(filename, "r") as f:
+            lines = [line.strip() for line in f]
+        
+        return lines
+
 
     USERNAME = 'gurney_nicholas' 
     PASSWORD = 'y51m14AbCgT7m4F6l235'
     get_Token(USERNAME, PASSWORD)
+    
+    USERNAME = "lockie_sam"
+    PASSWORD = "1fy6pJqE401w2OoAK1WR"
+    TOKEN = get_token(username=USERNAME, password=PASSWORD)
+    
+    URL = f"https://{USERNAME}:{PASSWORD}@api.meteomatics.com/2020-10-04T00Z--2025-10-04T00Z/precip_24h:mm/51.11,10.2/csv?access_token={TOKEN}"
 
-    #URL = f'https://api.meteomatics.com/2020-10-04T00Z--2025-10-04T00Z/precip_24h:mm/51.11,10.2/html?access_token={TOKEN}'
+    # If there is not a new URL, for testing purposes this should be False to speed things up
+    NEW_URL = False
 
-    #response = requests.get(URL)
-    #print(response.content[:5000])
+    if NEW_URL:
+        result = requests.get(URL).text
+        write_test_data(result)
+    
+    data = read_test_data()
+    print(data)
