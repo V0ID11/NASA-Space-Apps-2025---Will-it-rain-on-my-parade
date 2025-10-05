@@ -21,26 +21,31 @@
                     {% if rain_results %}
                         <h3> Rain </h3>
                         <ul class="rain_results-list">
-                            {% for result in rain_results %}
-                            <li class="rain_result-card">{{ result }}</li>
+                            {% for label, result in rain_results.items() %}
+                            <li class="rain_result-card">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                         <h3> Temperature </h3>
                         <ul class="temp_results-list">
-                            {% for result in temp_results %}
-                            <li class="temp_result-card">{{ result }}</li>
+                            {% for label, result in temp_results.items() %}
+                            <li class="temp_result-card">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                         <h3> Humidity </h3>
                         <ul class="humid_results-list">
-                            {% for result in humid_results %}
-                            <li class="humid_result-card">{{ result }}</li>
+                            {% for label, result in humid_results.items() %}
+                            <li class="humid_result-card">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                         <h3> Wind </h3>
                         <ul class="wind_results-list">
+<<<<<<< HEAD
+                            {% for label, result in humid_results.items() %}
+                            <li class="rain_result-card">{{ label }} = {{ result }}</li>
+=======
                             {% for result in wind_results %}
                             <li class="rain_result-card">{{ result }}</li>
+>>>>>>> 57268d02f99ca14ff635ed340330e5d00c091899
                             {% endfor %}
                         </ul>
                     {% else %}
@@ -49,7 +54,7 @@
                 </section>
 
                 <footer>
-                    <p>Thank you</p>
+                    <p>Made by the Climate Coders Team for the NASA Space Apps project.</p>
                 </footer>
             </main>
         </div>
