@@ -58,7 +58,8 @@ def classify_rain_data(data):
 def process_rain(date,location):
     data,avg,std,maximum,percentage_rainfall = get_rain_data(date,location)
     band = classify_rain_data(data)
-    return avg,band, std,maximum,percentage_rainfall
+    classification = classify_band(band,'Rain')
+    return avg,band, std,maximum,percentage_rainfall, classification
 
 
 
@@ -75,7 +76,8 @@ def classify_wind_data(data):
 def process_wind(date,location):
     data,avg,std,maximum,percentage_wind = get_wind_data(date,location)
     band = classify_wind_data(data)
-    return avg,band,std, maximum
+    classification = classify_band(band,'Wind')
+    return avg,band,std, maximum, classification
 
 
 def get_humidity_data(date,location):
@@ -91,7 +93,8 @@ def classify_humidity_data(data):
 def process_humidity(date,location):
     data,avg,std,maximum,percentage_humidity = get_humidity_data(date,location)
     band = classify_humidity_data(data)
-    return avg,band,std, maximum
+    classification = classify_band(band,'Humidity')
+    return avg,band,std, maximum, classification
 
 def get_temp_data(date,location):
     data = get_past_data(date,'Temperature',location)
@@ -106,44 +109,65 @@ def classify_temp_data(data):
 def process_temp(date,location):
     data,avg,std,maximum,percentage_temperature = get_temp_data(date,location)
     band = classify_temp_data(data)
-    return avg,band, std,maximum
+    classification = classify_band(band,'Temperature')
+    return avg,band, std,maximum, classification
 
 def fix_date(date: datetime.datetime):
     while date > datetime.datetime.now():
         date = date - datetime.timedelta(days=365)
     return date
 
+def classify_band(band, type):
+    rain_bands = {1: "Light Rain",
+        2: "Moderate Rain", 3: "Heavy Rain"}
+    wind_bands = {1: "Calm", 2: "Light Air", 3: "Light Breeze", 4: "Gentle Breeze", 5: "Moderate Breeze", 6: "Fresh Breeze", 7: "Strong Breeze", 8: "Near Gale", 9: "Gale", 10: "Strong Gale", 11: "Storm", 12: "Violent Storm", 13: "Hurricane"}
+    humidity_bands = {1:'Dry Moderate',2:'Dry Polar',3:'Dry Tropical',4:'Moist Moderate',5:'Moist Polar',6:'Moist Tropical',7:'Humid Moderate',8:'Humid Polar',9:'Humid Tropical',10:'Saturated'}
+    temp_bands = {1:'Extremely Cold', 2:'Cold', 3:'Warm', 4:'Hot', 5:'Very Hot'}
+
+    if type == 'Rain':
+        return rain_bands.get(band, "Unknown Band")
+    elif type == 'Wind':
+        return wind_bands.get(band, "Unknown Band")
+    elif type == 'Humidity':
+        return humidity_bands.get(band, "Unknown Band")
+    elif type == 'Temperature':
+        return temp_bands.get(band, "Unknown Band")
+
 def get_full_data_for_date(date,location):
     date = fix_date(date)
-    rain_avg,rain_band,rain_std,rain_max,percentage_rainfall = process_rain(date,location)
-    wind_avg,wind_band,wind_std,maximum_wind = process_wind(date,location)
-    humidity_avg,humidity_band,humidity_std,maximum_humidity = process_humidity(date,location)
-    temp_avg,temp_band,temp_std,maximum_temp = process_temp(date,location)
+    rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
+    wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
+    humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
+    temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
     return {
         "Rain": {
             "Average": rain_avg,
             "Band": rain_band,
             "Std": rain_std,
             "Max": rain_max,
-            "Percentage": percentage_rainfall
+            "Percentage": percentage_rainfall,
+            "Classification": rain_classification
         },
         "Wind": {
             "Average": wind_avg,
             "Band": wind_band,
             "Std": wind_std,
-            "Max": maximum_wind
+            "Max": maximum_wind,
+            "Classification": wind_classification
         },
         "Humidity": {
             "Average": humidity_avg,
             "Band": humidity_band,
             "Std": humidity_std,
-            "Max": maximum_humidity
+            "Max": maximum_humidity,
+            "Classification": humidity_classification
         },
         "Temperature": {
             "Average": temp_avg,
             "Band": temp_band,
             "Std": temp_std,
-            "Max": maximum_temp
+            "Max": maximum_temp,
+            "Classification": temp_classification
         }
     }
     

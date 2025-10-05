@@ -1,7 +1,9 @@
 
 from flask import Blueprint, render_template, request
+import DataUnderstanding as DU
 
 bp = Blueprint('main', __name__)
+
 
 
 @bp.route('/')
@@ -19,5 +21,7 @@ def search():
 		location = request.args.get('q')
 		date = request.args.get('calendar')
 
+	data = DU.get_full_data_for_date(date,location)
+
 	# Renders app/templates/search.html
-	return render_template('search.html',results=[location,date])
+	return render_template('search.html',results=data)

@@ -52,6 +52,15 @@ def create_lon_lat_rectangle(longitude, latitude):
     max_lat = latitude + 0.25
     return max_lat,min_long,  min_lat,max_long
 
+
+def load_token():
+    global USERNAME 
+    global PASSWORD
+    global TOKEN
+    USERNAME = "lockie_sam"
+    PASSWORD = "1fy6pJqE401w2OoAK1WR"
+    TOKEN = GetData.get_token(username=USERNAME, password=PASSWORD)
+
 if __name__ == '__main__':
     def write_test_data(data: str, filename: str="test_data.txt") -> None:
         with open(filename, "w") as f:
@@ -80,6 +89,7 @@ if __name__ == '__main__':
     
     #data = read_test_data()
     #print(data)
+
     
     
 
