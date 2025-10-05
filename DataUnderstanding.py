@@ -33,6 +33,7 @@ def get_past_data(date, type,location):
     info_df = pd.DataFrame()
     date = fix_date(date)
     for i in range(5,0,-1):
+        print(i)
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
         write_test_data(data)
