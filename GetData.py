@@ -37,7 +37,7 @@ def date_formatting(date_from,date_to):
 def make_url(username,password,token,date_from,date_to,datatype, location):
     location=get_lon_lat(location)
     location = create_lon_lat_rectangle(location[0],location[1])
-    url = f"https://{username}:{password}@api.meteomatics.com/{date_formatting(date_from,date_to)}/{convert_to_dataset(datatype)}/{location[0]},{location[1]}_{location[2]},{location[3]}:10x10/csv?access_token={token}"
+    url = f"https://{username}:{password}@api.meteomatics.com/{date_formatting(date_from,date_to)}/{convert_to_dataset(datatype)}/{location[0]},{location[1]}_{location[2]},{location[3]}:5x5/csv?access_token={token}"
     return url
 
 def get_lon_lat(location):
