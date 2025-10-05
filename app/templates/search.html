@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Search Results</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
     </head>
     <body>  
         <div class="page">
@@ -20,27 +20,27 @@
                 <section class="column">
                     {% if rain_results %}
                         <h3> Rain </h3>
-                        <ul class="rain_results-list">
+                        <ul class = "card">
                             {% for label, result in rain_results.items() %}
-                            <li class="rain_result-card">{{ label }} = {{ result }}</li>
+                            <li class="card_inside">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                         <h3> Temperature </h3>
-                        <ul class="temp_results-list">
+                        <ul class="card">
                             {% for label, result in temp_results.items() %}
-                            <li class="temp_result-card">{{ label }} = {{ result }}</li>
+                            <li class="card_inside">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                         <h3> Humidity </h3>
-                        <ul class="humid_results-list">
+                        <ul class="card">
                             {% for label, result in humid_results.items() %}
-                            <li class="humid_result-card">{{ label }} = {{ result }}</li>
+                            <li class="card_inside">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                         <h3> Wind </h3>
-                        <ul class="wind_results-list">
+                        <ul class="card">
                             {% for label, result in wind_results.items() %}
-                            <li class="rain_result-card">{{ label }} = {{ result }}</li>
+                            <li class="card_inside">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
                     {% else %}

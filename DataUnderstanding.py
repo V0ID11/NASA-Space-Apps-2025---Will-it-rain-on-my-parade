@@ -38,7 +38,7 @@ def get_past_data(date, type,location):
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
         write_test_data(data)
-        data_df = pd.read_csv('data.txt',delimiter=';')
+        data_df = pd.read_csv('/home/data.txt',delimiter=';')
         info_df = pd.concat([info_df,data_df])
     info_df.columns = ["Lat","Lon","Date",type]
 
@@ -55,7 +55,7 @@ def produce_averages(data:pd.DataFrame,type,bins):
     return data, mean,std,maximum,percentage_rainfall
 
 
-def write_test_data(data: str, filename: str="data.txt") -> None:
+def write_test_data(data: str, filename: str="/home/data.txt") -> None:
         with open(filename, "w") as f:
             f.write(data)
 
@@ -147,19 +147,20 @@ def classify_band(band, type):
     elif type == 'Temperature':
         return temp_bands.get(band, "Unknown Band")
 
-def save_graph(data,type):
-    x_data = data['Days']
+def save_graph(data,date,type):
+    data = get_day_in_set(data,date)
+    x_data = data['Day']
     y_data = data[type]
-    cs = CubicSpline(x_data, y_data)
-    newx_dat = np.linspace(1,len(x_data),1000)
-    newy_dat = cs(newx_dat)
+    # cs = CubicSpline(np.arange(0,10), y_data)
+    # newx_dat = np.linspace(1,np.arange(0,10),1000)
+    # newy_dat = cs(newx_dat)
     plt.scatter(x_data, y_data, label = type)
     plt.xlabel('Day')
     plt.ylabel(type)
     type_av = st.mean(y_data)
     plt.axhline(y= type_av, color='r', linestyle='--', label= 'Average' +""+ type)
     plt.legend()
-    plt.plot(newx_dat, newy_dat)
+    plt.plot(x_data, y_data)
     plt.show()
 
 def get_day_in_set(data,date):
@@ -181,8 +182,8 @@ def get_full_data_for_date(date,location):
     temp_data,temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
 
     data_list = [rain_data,wind_data,humidity_data,temp_data]
-    for i in data_list: 
-        get_day_in_set(i,date)
+    # for i in data_list: 
+    #     save_graph(i,date, i.columns[2])
 
     return {
         "Rain": {
