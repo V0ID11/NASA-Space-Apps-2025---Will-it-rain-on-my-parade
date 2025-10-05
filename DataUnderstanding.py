@@ -8,6 +8,15 @@ import numpy as np
 
 
 
+
+class access_dfs:
+    def __init__(self):
+        self.dfs = {}
+
+def create_df_storage():
+    df_storage = access_dfs()
+    global df_storage
+
 def date_processing(date:datetime.datetime):
     date = fix_date(date)
     end_date = date + datetime.timedelta(days=10) 
@@ -32,6 +41,9 @@ def get_past_data(date, type,location):
         data_df = pd.read_csv('/home/data.txt',delimiter=';')
         info_df = pd.concat([info_df,data_df])
     info_df.columns = ["Lat","Lon","Date",type]
+
+    df_storage.dfs[type] = info_df
+
     return info_df
 
 def produce_averages(data:pd.DataFrame,type,bins):
