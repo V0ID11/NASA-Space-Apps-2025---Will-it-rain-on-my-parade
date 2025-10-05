@@ -13,27 +13,25 @@ class access_dfs:
     def __init__(self):
         self.dfs = {}
 
-def create_df_storage():
-    df_storage = access_dfs()
-    global df_storage
 
 def date_processing(date:datetime.datetime):
     date = fix_date(date)
-    end_date = date + datetime.timedelta(days=10) 
-    start_date = date - datetime.timedelta(days=10)
+    end_date = date + datetime.timedelta(days=5) 
+    start_date = date - datetime.timedelta(days=5)
 
     return start_date,end_date
 
 
 def make_request(date, type, location):
-    date_from, date_to = date_processing(date)
     USERNAME,PASSWORD,TOKEN = load_token()
+    date_from,date_to = date_processing(date)
     URL = GetData.make_url(USERNAME, PASSWORD, TOKEN, date_from, date_to,type,location)
     response = requests.get(URL).text
     return response
 
 def get_past_data(date, type,location):
     info_df = pd.DataFrame()
+    date = fix_date(date)
     for i in range(5,0,-1):
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
@@ -41,8 +39,6 @@ def get_past_data(date, type,location):
         data_df = pd.read_csv('/home/data.txt',delimiter=';')
         info_df = pd.concat([info_df,data_df])
     info_df.columns = ["Lat","Lon","Date",type]
-
-    df_storage.dfs[type] = info_df
 
     return info_df
 

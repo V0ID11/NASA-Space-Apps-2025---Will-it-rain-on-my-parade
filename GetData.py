@@ -46,10 +46,10 @@ def get_lon_lat(location):
     return location.longitude,location.latitude
 
 def create_lon_lat_rectangle(longitude, latitude):
-    min_long = longitude - 0.25
-    max_long = longitude + 0.25
-    min_lat =  latitude - 0.25 
-    max_lat = latitude + 0.25
+    min_long = longitude - 0.1
+    max_long = longitude + 0.1
+    min_lat =  latitude - 0.1
+    max_lat = latitude + 0.1
     return max_lat,min_long,  min_lat,max_long
 
 
