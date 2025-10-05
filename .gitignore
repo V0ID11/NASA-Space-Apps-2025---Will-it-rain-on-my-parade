@@ -1,2 +1,7 @@
 __pycache__/
 */__pycache__/
+# also ignore any nested occurrences (double-star) and explicit app cache
+**/__pycache__/
+app/__pycache__/
+# ignore python bytecode
+*.pyc
