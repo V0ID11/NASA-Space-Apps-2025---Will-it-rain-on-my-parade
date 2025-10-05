@@ -1,5 +1,5 @@
 body {
-	font-family: Arial;
+	font-family: Helvetica;
 	color: darkslategray;
 }
 
@@ -9,7 +9,7 @@ h1 {
 
 h1,
 h2 {
-    background-color: darkblue;
+    background-color: royalblue;
 	color: white ;
 	text-transform: uppercase;
 	font-weight: 100;
@@ -31,7 +31,7 @@ img {
 }
 footer {
 	margin-top: 70px;
-	background-color: darkblue;
+	background-color: royalblue;
 	color: white;
 }
 
