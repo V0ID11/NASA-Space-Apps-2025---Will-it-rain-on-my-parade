@@ -12,13 +12,12 @@
 			<h1>Will it rain on my parade?</h1>
 			<div class='column'>
 				<p>Hi, welcome to the climate coders website. This website will allow you to see the weather conditions for a specific date in the future, based off historical data.</p>
-				<form action="/search" method="post">
-  					<input type="text" name="q" placeholder="Search Location">
-  					<button type="submit">Search</button>
-				<form>
+				<form id="search" action="/search" method="post">
+  					<input type="text" name="q" placeholder="Search Location" class="required-field">
+
   					<label for="calendar">Select a date:</label>
-  					<input type="date" id="calendar" name="calendar">
-  					<button type="submit">Submit</button>
+  					<input type="date" id="calendar" name="calendar" class="required-field">
+  					<button id="submit" type="submit">Submit</button>
 				</form>
 			</div>
 			<footer> 
@@ -29,3 +28,22 @@
 		</main>
 	</body>
  </html>
+
+ <script>
+	const form = document.getElementById("search");
+	const submitButton = document.getElementById("submit");
+	const requiredFields = document.querySelectorAll('.required-field');
+
+	function checkFields(){
+		let allFieldsFilled = true;
+		requiredFields.forEach(field => {
+			if (field.value.trim()===''){
+				allFieldsFilled = false;
+			}
+		});
+		submitButton.disabled = !allFieldsFilled;
+
+	}
+	checkFields();
+	form.addEventListener('input',checkFields);
+ </script>

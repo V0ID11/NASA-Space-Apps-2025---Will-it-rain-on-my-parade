@@ -59,9 +59,3 @@ footer p {
     }
 }
 
-<div class="search-container">
-  <form action="/search" method="get">
-    <input class="search-box" type="text" name="q" placeholder="Search...">
-    <button class="search-button" type="submit">Go</button>
-  </form>
-</div>
