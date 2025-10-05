@@ -61,7 +61,7 @@ def write_test_data(data: str, filename: str="/home/data.txt") -> None:
 
 def get_rain_data(date,location):
     data = get_past_data(date,'Precipitation',location)
-    bins = np.array([0,0.500004,3.99996,100000])
+    bins = np.array([-1,0.00001,0.500004,3.99996,100000])
     data,avg, std, maximum, percentage_rainfall = produce_averages(data,'Precipitation', bins)
     return data,avg,std,maximum,percentage_rainfall
 
@@ -73,7 +73,7 @@ def process_rain(date,location):
     data,avg,std,maximum,percentage_rainfall = get_rain_data(date,location)
     band = classify_rain_data(data)
     classification = classify_band(band,'Rain')
-    return data,avg,band, std,maximum,percentage_rainfall, classification
+    return avg,band, std,maximum,percentage_rainfall, classification
 
 
 
@@ -91,7 +91,7 @@ def process_wind(date,location):
     data,avg,std,maximum,percentage_wind = get_wind_data(date,location)
     band = classify_wind_data(data)
     classification = classify_band(band,'Wind')
-    return data,avg,band,std, maximum, classification
+    return avg,band,std, maximum, classification
 
 
 def get_humidity_data(date,location):
@@ -108,7 +108,7 @@ def process_humidity(date,location):
     data,avg,std,maximum,percentage_humidity = get_humidity_data(date,location)
     band = classify_humidity_data(data)
     classification = classify_band(band,'Humidity')
-    return data,avg,band,std, maximum, classification
+    return avg,band,std, maximum, classification
 
 def get_temp_data(date,location):
     data = get_past_data(date,'Temperature',location)
@@ -124,32 +124,112 @@ def process_temp(date,location):
     data,avg,std,maximum,percentage_temperature = get_temp_data(date,location)
     band = classify_temp_data(data)
     classification = classify_band(band,'Temperature')
-    return data,avg,band, std,maximum, classification
+    return avg,band, std,maximum, classification
 
 def fix_date(date: datetime.datetime):
     while date > datetime.datetime.now():
         date = date - datetime.timedelta(days=365)
     return date
 
-def classify_band(band, type):
-    rain_bands = {1: "Light Rain",
+def classify_band(band, type) -> tuple[str, str]: # Name of band, danger level
+    rain_bands = {1: "Dry", 2: "Light Rain",
         2: "Moderate Rain", 3: "Heavy Rain"}
     wind_bands = {1: "Calm", 2: "Light Air", 3: "Light Breeze", 4: "Gentle Breeze", 5: "Moderate Breeze", 6: "Fresh Breeze", 7: "Strong Breeze", 8: "Near Gale", 9: "Gale", 10: "Strong Gale", 11: "Storm", 12: "Violent Storm", 13: "Hurricane"}
     humidity_bands = {1:'Dry Moderate',2:'Dry Polar',3:'Dry Tropical',4:'Moist Moderate',5:'Moist Polar',6:'Moist Tropical',7:'Humid Moderate',8:'Humid Polar',9:'Humid Tropical',10:'Saturated'}
-    temp_bands = {1:'Extremely Cold', 2:'Cold', 3:'Warm', 4:'Hot', 5:'Very Hot'}
+    temp_bands = {1:'Very Cold', 2:'Cold', 3:'Mild', 4:'Warm', 5:'Hot', 6:'Very Hot'}
+    danger_levels = ["Safe", "Dangerous", "Very Dangerous"]
+
+    band_name = ""
+    danger = danger_levels[0]
 
     if type == 'Rain':
-        return rain_bands.get(band, "Unknown Band")
-    elif type == 'Wind':
-        return wind_bands.get(band, "Unknown Band")
-    elif type == 'Humidity':
-        return humidity_bands.get(band, "Unknown Band")
-    elif type == 'Temperature':
-        return temp_bands.get(band, "Unknown Band")
+        band_name = rain_bands.get(band, "Unknown Band")
+        if band >= 3:
+            danger = danger_levels[2]
+        elif band >= 2:
+            danger = danger_levels[1]
 
-def save_graph(data,date,type):
-    data = get_day_in_set(data,date)
-    x_data = data['Day']
+    elif type == 'Wind':
+        band_name = wind_bands.get(band, "Unknown Band")
+        if band >= 4:
+            danger = danger_levels[2]
+        elif band >= 3:
+            danger = danger_levels[1]
+    
+    elif type == 'Humidity':
+        band_name = humidity_bands.get(band, "Unknown Band")
+
+    elif type == 'Temperature':
+        band_name = temp_bands.get(band, "Unknown Band")
+        
+        # Cold
+        if band <= 1:
+            danger = danger_levels[2]
+        elif band <= 2:
+            danger = danger_levels[1]
+        
+        # Hot
+        if band >= 6:
+            danger = danger_levels[2]
+        elif band >= 5:
+            danger = danger_levels[1]
+
+    
+    return band_name, danger
+
+def get_comfort_level(rain_class: str, wind_class: str, humid_class: str, temp_class: str) -> str:
+    comfort_level = 0
+    comforts = ["Normal", "Uncomfortable", "Very Uncomfortable"]
+    if rain_class == "Dry":
+        wet = False
+    if wet:
+        comfort_level += 1
+
+    # Humidity
+    if wet and temp_class == "Very Hot":
+        return "Uncomfortable - skin may fry"
+    elif humid_class == "Moist Tropical":
+        comfort_level += 1
+    elif humid_class == "Saturated":
+        comfort_level += 1
+    elif humid_class == "Humid Tropical":
+        comfort_level += 2
+    
+    # Temperature
+    if temp_class == "Hot" or temp_class == "Cold":
+        comfort_level += 1
+    elif temp_class == "Very Cold" or temp_class == "Very Hot":
+        comfort_level += 2
+
+    # Wind
+    if wind_class == "Near Gale" or wind_class == "Gale" or wind_class == "Strong Gale":
+        comfort_level += 1
+    elif wind_class == "Storm" or wind_class == "Violent Storm" or wind_class == "Hurricane":
+        comfort_level += 2
+
+    if comfort_level > 2:
+        comfort_level = 2
+
+    return comforts[comfort_level]
+
+def get_danger_level(rain_danger: str, wind_danger: str, temp_danger: str) -> str:
+    dangers = [rain_danger, wind_danger, temp_danger]
+    if "Very Dangerous" in dangers:
+        return "Very Dangerous"
+    num_dangers = 0
+    for danger in dangers:
+        if danger == "Dangerous":
+            num_dangers += 1
+
+    if num_dangers >= 2:
+        return "Dangerous"
+    else:
+        return "Safe"
+
+
+
+def save_graph(data,type):
+    x_data = data['Days']
     y_data = data[type]
     # cs = CubicSpline(np.arange(0,10), y_data)
     # newx_dat = np.linspace(1,np.arange(0,10),1000)
@@ -176,6 +256,10 @@ def get_day_in_set(data,date):
 
 def get_full_data_for_date(date,location):
     date = fix_date(date)
+    rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
+    wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
+    humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
+    temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
     rain_data,rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
     wind_data,wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
     humidity_data,humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
@@ -210,6 +294,10 @@ def get_full_data_for_date(date,location):
             "Standard Deviation": temp_std,
             "Maximum Temperature": maximum_temp,
             "Classification": temp_classification
+        },
+        "Feel": {
+            "Danger Level": danger_level,
+            "Comfort Level": comfort_level
         }
     }
     
