@@ -1,9 +1,12 @@
 import GetData 
+from GetData import load_token
 import datetime
 import requests
 import pandas as pd
 import csv 
 import numpy as np
+
+
 
 def date_processing(date:datetime.datetime):
     date = fix_date(date)
@@ -15,6 +18,7 @@ def date_processing(date:datetime.datetime):
 
 def make_request(date, type, location):
     date_from, date_to = date_processing(date)
+    USERNAME,PASSWORD,TOKEN = load_token()
     URL = GetData.make_url(USERNAME, PASSWORD, TOKEN, date_from, date_to,type,location)
     response = requests.get(URL).text
     return response
@@ -25,7 +29,7 @@ def get_past_data(date, type,location):
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
         write_test_data(data)
-        data_df = pd.read_csv('data.txt ',delimiter=';')
+        data_df = pd.read_csv('/home/data.txt',delimiter=';')
         info_df = pd.concat([info_df,data_df])
     info_df.columns = ["Lat","Lon","Date",type]
     return info_df
@@ -41,7 +45,7 @@ def produce_averages(data:pd.DataFrame,type,bins):
     return data, mean,std,maximum,percentage_rainfall
 
 
-def write_test_data(data: str, filename: str="data.txt") -> None:
+def write_test_data(data: str, filename: str="/home/data.txt") -> None:
         with open(filename, "w") as f:
             f.write(data)
 

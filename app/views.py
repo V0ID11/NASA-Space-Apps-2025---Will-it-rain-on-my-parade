@@ -1,7 +1,8 @@
 
 from flask import Blueprint, render_template, request
 import DataUnderstanding as DU
-
+import datetime
+import GetData
 bp = Blueprint('main', __name__)
 
 
@@ -21,7 +22,37 @@ def search():
 		location = request.args.get('q')
 		date = request.args.get('calendar')
 
+	
+
+	date = date.split("-")
+	date = datetime.datetime(year=int(date[0]),month=int(date[1]), day=int(date[2]))
+
+
 	data = DU.get_full_data_for_date(date,location)
+	rain_list, temp_list, humidity_list, wind_list = prepare_for_display(data)
 
 	# Renders app/templates/search.html
-	return render_template('search.html',results=data)
+	return render_template('search.html',results=rain_list+temp_list+humidity_list+wind_list)
+
+
+def prepare_for_display(data: dict):
+	rain_data = data['Rain']
+	temp_data = data['Temperature']
+	humidity_data = data['Humidity']
+	wind_data = data['Wind']
+
+	rain_list = produce_data_lists(rain_data)
+	temp_list = produce_data_lists(temp_data)
+	humitidity_list = produce_data_lists(humidity_data)
+	wind_list = produce_data_lists(wind_data)
+
+	return rain_list, temp_list, humitidity_list,wind_list
+
+
+def produce_data_lists(data:dict):
+	output_list = []
+	for key, value in data.items():
+		output_list.append(value)
+	return output_list
+
+

@@ -54,12 +54,11 @@ def create_lon_lat_rectangle(longitude, latitude):
 
 
 def load_token():
-    global USERNAME 
-    global PASSWORD
-    global TOKEN
+    
     USERNAME = "lockie_sam"
     PASSWORD = "1fy6pJqE401w2OoAK1WR"
-    TOKEN = GetData.get_token(username=USERNAME, password=PASSWORD)
+    TOKEN = get_token(username=USERNAME, password=PASSWORD)
+    return USERNAME, PASSWORD,TOKEN
 
 if __name__ == '__main__':
     def write_test_data(data: str, filename: str="test_data.txt") -> None:
