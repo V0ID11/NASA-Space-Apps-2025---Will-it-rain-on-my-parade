@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import csv 
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 
 
@@ -71,7 +71,7 @@ def process_rain(date,location):
     data,avg,std,maximum,percentage_rainfall = get_rain_data(date,location)
     band = classify_rain_data(data)
     classification = classify_band(band,'Rain')
-    return avg,band, std,maximum,percentage_rainfall, classification
+    return data,avg,band, std,maximum,percentage_rainfall, classification
 
 
 
@@ -89,7 +89,7 @@ def process_wind(date,location):
     data,avg,std,maximum,percentage_wind = get_wind_data(date,location)
     band = classify_wind_data(data)
     classification = classify_band(band,'Wind')
-    return avg,band,std, maximum, classification
+    return data,avg,band,std, maximum, classification
 
 
 def get_humidity_data(date,location):
@@ -106,7 +106,7 @@ def process_humidity(date,location):
     data,avg,std,maximum,percentage_humidity = get_humidity_data(date,location)
     band = classify_humidity_data(data)
     classification = classify_band(band,'Humidity')
-    return avg,band,std, maximum, classification
+    return data,avg,band,std, maximum, classification
 
 def get_temp_data(date,location):
     data = get_past_data(date,'Temperature',location)
@@ -122,7 +122,7 @@ def process_temp(date,location):
     data,avg,std,maximum,percentage_temperature = get_temp_data(date,location)
     band = classify_temp_data(data)
     classification = classify_band(band,'Temperature')
-    return avg,band, std,maximum, classification
+    return data,avg,band, std,maximum, classification
 
 def fix_date(date: datetime.datetime):
     while date > datetime.datetime.now():
@@ -145,12 +145,20 @@ def classify_band(band, type):
     elif type == 'Temperature':
         return temp_bands.get(band, "Unknown Band")
 
+def save_graph(data):
+    pass
+
 def get_full_data_for_date(date,location):
     date = fix_date(date)
-    rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
-    wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
-    humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
-    temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
+    rain_data,rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
+    wind_data,wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
+    humidity_data,humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
+    temp_data,temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
+
+    data_list = [rain_data,wind_data,humidity_data,temp_data]
+    for i in data_list: 
+        save_graph(i)
+
     return {
         "Rain": {
             "Average": rain_avg,
