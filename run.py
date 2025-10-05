@@ -1,6 +1,6 @@
 from app import create_app
-from ftplib import FTP 
-
+import DataUnderstanding
+from DataUnderstanding import GetData
 
 
 app = create_app()
@@ -8,7 +8,12 @@ app = create_app()
 
 if __name__ == '__main__':
     # default to localhost:8000 for local development
+    global USERNAME 
+    global PASSWORD
+    global TOKEN
+    USERNAME = "lockie_sam"
+    PASSWORD = "1fy6pJqE401w2OoAK1WR"
+    TOKEN = GetData.get_token(username=USERNAME, password=PASSWORD)
 
-    ftp = FTP('194.76.27.28')
-    ftp.login(user='climate-coders_webdev',passwd='jOjI8f!98a*Atugu4X9dR#1nLk')
+
     app.run()
