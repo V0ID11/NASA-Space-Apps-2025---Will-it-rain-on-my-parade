@@ -5,27 +5,33 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Search Results</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     </head>
     <body>  
-        <main>
-            <h1>Search Results</h1>
-            <div class='column'>
-                {% if results %}
-                    <ul>
-                    {% for result in results %}
-                        <li>{{ result }}</li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No results found.</p>
-                {% endif %}
-            </div>
-            <footer> 
-                <p>Thank you </p> 
-            </footer>
-            
-            </form>
-        </main>
+        <div class="page">
+            <main class="main">
+                <header>
+                    <h1>Search Results</h1>
+                    <p class="lead">Results for your selected location and date</p>
+                    <a class="back-link" href="{{ url_for('main.index') }}">← Back to search</a>
+                </header>
+
+                <section class="column">
+                    {% if results %}
+                        <ul class="results-list">
+                            {% for result in results %}
+                            <li class="result-card">{{ result }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="lead">No results found. Try a different date or location.</p>
+                    {% endif %}
+                </section>
+
+                <footer>
+                    <p>Thank you</p>
+                </footer>
+            </main>
+        </div>
     </body>
  </html>

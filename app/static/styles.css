@@ -98,6 +98,49 @@ hr {
     background: #23a7de;
     color: #fff;
 }
+
+/* Small enhancements for search results */
+.column {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.6rem;
+}
+
+.back-link {
+    display: inline-block;
+    margin: 0.6rem 0 1.4rem 0;
+    color: #2498e3;
+    text-decoration: none;
+    font-weight: 600;
+}
+.back-link:hover { color: #188dd9; text-decoration: underline; }
+
+.results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.result-card {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    color: #222;
+    font-size: 1.4rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+footer {
+    margin-top: 2.4rem;
+    color: #666;
+}
+
 @media (max-width:959px) {
     .page:before {
         -ms-flex-preferred-size: 400px;
