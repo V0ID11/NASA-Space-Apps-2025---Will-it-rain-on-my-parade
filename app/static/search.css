@@ -42,12 +42,12 @@ h2 { font-size: 3.6rem; }
 
 ul {
     list-style-type: none;
-    background: darkgoldenrod;
+    background: khaki;
     padding: 20px;
 }
 
 ul li {
-    background: papayawhip;
+    background: khaki;
     color: darkslategray;
     margin: 5px;
 }
