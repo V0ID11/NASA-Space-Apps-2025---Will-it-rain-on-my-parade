@@ -36,7 +36,7 @@ def get_past_data(date, type,location):
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
         write_test_data(data)
-        data_df = pd.read_csv('data.txt',delimiter=';')
+        data_df = pd.read_csv('/home/data.txt',delimiter=';')
         info_df = pd.concat([info_df,data_df])
     info_df.columns = ["Lat","Lon","Date",type]
 
@@ -53,7 +53,7 @@ def produce_averages(data:pd.DataFrame,type,bins):
     return data, mean,std,maximum,percentage_rainfall
 
 
-def write_test_data(data: str, filename: str="data.txt") -> None:
+def write_test_data(data: str, filename: str="/home/data.txt") -> None:
         with open(filename, "w") as f:
             f.write(data)
 
@@ -149,9 +149,11 @@ def save_graph(data):
     pass
 
 def get_day_in_set(data,date):
-    time_data = data['Date']
-    format_date = "%y-%m-%dT%H:%M:%SZ"
-    data['Date'] = data['Date'].map(lambda x: datetime.datetime.strptime(x,format_date))
+    
+    data['Date'] = data['Date'].apply(lambda x: x.replace("T", " "))
+    data['Date'] = data['Date'].apply(lambda x: x.replace("Z",""))
+    format_date = "%y-%m-%d %H:%M:%S"
+    data['Date'] = data['Date'].apply(lambda x: datetime.datetime.strptime(x,format_date))
 
 
 def get_full_data_for_date(date,location):
@@ -163,7 +165,7 @@ def get_full_data_for_date(date,location):
 
     data_list = [rain_data,wind_data,humidity_data,temp_data]
     # for i in data_list: 
-        # get_day_in_set(i,date)
+    #     get_day_in_set(i,date)
 
     return {
         "Rain": {
