@@ -12,15 +12,35 @@
             <main class="main">
                 <header>
                     <h1>Search Results</h1>
+                    <img src="logo.jpg" alt="Team Logo">
                     <p class="lead">Results for your selected location and date</p>
                     <a class="back-link" href="{{ url_for('main.index') }}">← Back to search</a>
                 </header>
 
                 <section class="column">
                     {% if results %}
-                        <ul class="results-list">
-                            {% for result in results %}
-                            <li class="result-card">{{ result }}</li>
+                        <h3> Rain </h3>
+                        <ul class="rain_results-list">
+                            {% for result in rain_results %}
+                            <li class="rain_result-card">{{ result }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3> Temperature </h3>
+                        <ul class="temp_results-list">
+                            {% for result in temp_results %}
+                            <li class="temp_result-card">{{ result }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3> Humidity </h3>
+                        <ul class="humid_results-list">
+                            {% for result in humid_results %}
+                            <li class="humid_result-card">{{ result }}</li>
+                            {% endfor %}
+                        </ul>
+                        <h3> Wind </h3>
+                        <ul class="wind_results-list">
+                            {% for result in humid_results %}
+                            <li class="rain_result-card">{{ result }}</li>
                             {% endfor %}
                         </ul>
                     {% else %}
