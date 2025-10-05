@@ -41,12 +41,12 @@ def prepare_for_display(data: dict):
 	humidity_data = data['Humidity']
 	wind_data = data['Wind']
 
-	rain_list = produce_data_lists(rain_data)
-	temp_list = produce_data_lists(temp_data)
-	humitidity_list = produce_data_lists(humidity_data)
-	wind_list = produce_data_lists(wind_data)
+	# rain_list = produce_data_lists(rain_data)
+	# temp_list = produce_data_lists(temp_data)
+	# humitidity_list = produce_data_lists(humidity_data)
+	# wind_list = produce_data_lists(wind_data)
 
-	return rain_list, temp_list, humitidity_list,wind_list
+	return rain_data, temp_data, humidity_data, wind_data
 
 
 def produce_data_lists(data:dict):

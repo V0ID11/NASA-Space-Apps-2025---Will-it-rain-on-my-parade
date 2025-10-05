@@ -161,28 +161,28 @@ def get_full_data_for_date(date,location):
 
     return {
         "Rain": {
-            "Average": rain_avg,
-            "Std": rain_std,
-            "Max": rain_max,
-            "Percentage": percentage_rainfall,
+            "Average Rainfall": rain_avg,
+            "Standard Deviation": rain_std,
+            "Maximum Rainfall": rain_max,
+            "Percentage Chance": percentage_rainfall,
             "Classification": rain_classification
         },
         "Wind": {
-            "Average": wind_avg,
-            "Std": wind_std,
-            "Max": maximum_wind,
+            "Average Wind Speed": wind_avg,
+            "Standard Deviation": wind_std,
+            "Maximum Wind Speed": maximum_wind,
             "Classification": wind_classification
         },
         "Humidity": {
-            "Average": humidity_avg,
-            "Std": humidity_std,
-            "Max": maximum_humidity,
+            "Average Humidity": humidity_avg,
+            "Standard Deviation": humidity_std,
+            "Maximum Humidity": maximum_humidity,
             "Classification": humidity_classification
         },
         "Temperature": {
-            "Average": temp_avg,
-            "Std": temp_std,
-            "Max": maximum_temp,
+            "Average Temperature": temp_avg,
+            "Standard Deviation": temp_std,
+            "Maximum Temperature": maximum_temp,
             "Classification": temp_classification
         }
     }
