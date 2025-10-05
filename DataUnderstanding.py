@@ -6,6 +6,8 @@ import pandas as pd
 import csv 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import CubicSpline
+import statistics as st
 
 
 
@@ -145,8 +147,20 @@ def classify_band(band, type):
     elif type == 'Temperature':
         return temp_bands.get(band, "Unknown Band")
 
-def save_graph(data):
-    pass
+def save_graph(data,type):
+    x_data = data['Days']
+    y_data = data[type]
+    cs = CubicSpline(x_data, y_data)
+    newx_dat = np.linspace(1,len(x_data),1000)
+    newy_dat = cs(newx_dat)
+    plt.scatter(x_data, y_data, label = type)
+    plt.xlabel('Day')
+    plt.ylabel(type)
+    type_av = st.mean(y_data)
+    plt.axhline(y= type_av, color='r', linestyle='--', label= 'Average' +""+ type)
+    plt.legend()
+    plt.plot(newx_dat, newy_dat)
+    plt.show()
 
 def get_day_in_set(data,date):
     
