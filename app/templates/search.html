@@ -12,7 +12,7 @@
             <main class="main">
                 <header>
                     <h1>Search Results</h1>
-                    <img src="logo.jpg" alt="Team Logo">
+                    <img src="img/logo.jpg" alt="Team Logo">
                     <p class="lead">Results for your selected location and date</p>
                     <a class="back-link" href="{{ url_for('main.index') }}">← Back to search</a>
                 </header>
@@ -39,13 +39,8 @@
                         </ul>
                         <h3> Wind </h3>
                         <ul class="wind_results-list">
-<<<<<<< HEAD
-                            {% for label, result in humid_results.items() %}
+                            {% for label, result in wind_results.items() %}
                             <li class="rain_result-card">{{ label }} = {{ result }}</li>
-=======
-                            {% for result in wind_results %}
-                            <li class="rain_result-card">{{ result }}</li>
->>>>>>> 57268d02f99ca14ff635ed340330e5d00c091899
                             {% endfor %}
                         </ul>
                     {% else %}
