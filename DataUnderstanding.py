@@ -6,6 +6,7 @@ import csv
 import numpy as np
 
 def date_processing(date:datetime.datetime):
+    date = fix_date(date)
     end_date = date + datetime.timedelta(days=10) 
     start_date = date - datetime.timedelta(days=10)
 
@@ -26,7 +27,6 @@ def get_past_data(date, type,location):
         write_test_data(data)
         data_df = pd.read_csv('data.txt ',delimiter=';')
         info_df = pd.concat([info_df,data_df])
-    print(info_df.head())
     info_df.columns = ["Lat","Lon","Date",type]
     return info_df
 
@@ -51,15 +51,102 @@ def get_rain_data(date,location):
     data,avg, std, maximum, percentage_rainfall = produce_averages(data,'Precipitation', bins)
     return data,avg,std,maximum,percentage_rainfall
 
-def classify_rain_data(data,avg, std, maximum, percentage_rainfall):
+def classify_rain_data(data):
     band = np.ceil(data['class'].mean())
     return band
 
 def process_rain(date,location):
     data,avg,std,maximum,percentage_rainfall = get_rain_data(date,location)
-    band = classify_rain_data(data,avg,std,maximum,percentage_rainfall)
-    return avg,band, percentage_rainfall
+    band = classify_rain_data(data)
+    return avg,band, std,maximum,percentage_rainfall
 
+
+
+def get_wind_data(date,location):
+    data = get_past_data(date,'Wind',location)
+    bins = np.array([0,1,5,11,19,28,38,49,61,74,88,102,117,1000000])
+    data,avg, std, maximum, percentage_wind = produce_averages(data,'Wind', bins)
+    return data,avg,std,maximum,percentage_wind
+
+def classify_wind_data(data):
+    band = np.ceil(data['class'].mean())
+    return band
+
+def process_wind(date,location):
+    data,avg,std,maximum,percentage_wind = get_wind_data(date,location)
+    band = classify_wind_data(data)
+    return avg,band,std, maximum
+
+
+def get_humidity_data(date,location):
+    data = get_past_data(date,'Humidity',location)
+    bins = np.array([0,10,20,30,40,50,60,70,80,90,100])
+    data,avg, std, maximum, percentage_humidity = produce_averages(data,'Humidity', bins)
+    return data,avg,std,maximum,percentage_humidity
+
+def classify_humidity_data(data):
+    band = np.ceil(data['class'].mean())
+    return band
+
+def process_humidity(date,location):
+    data,avg,std,maximum,percentage_humidity = get_humidity_data(date,location)
+    band = classify_humidity_data(data)
+    return avg,band,std, maximum
+
+def get_temp_data(date,location):
+    data = get_past_data(date,'Temperature',location)
+    bins = np.array([-100,-5,5,25,32,35,10000])
+    data,avg, std, maximum, percentage_temp = produce_averages(data,'Temperature', bins)
+    return data,avg,std,maximum,percentage_temp
+
+def classify_temp_data(data):
+    band = np.ceil(data['class'].mean())
+    return band
+
+def process_temp(date,location):
+    data,avg,std,maximum,percentage_temperature = get_temp_data(date,location)
+    band = classify_temp_data(data)
+    return avg,band, std,maximum
+
+def fix_date(date: datetime.datetime):
+    while date > datetime.datetime.now():
+        date = date - datetime.timedelta(days=365)
+    return date
+
+def get_full_data_for_date(date,location):
+    date = fix_date(date)
+    rain_avg,rain_band,rain_std,rain_max,percentage_rainfall = process_rain(date,location)
+    wind_avg,wind_band,wind_std,maximum_wind = process_wind(date,location)
+    humidity_avg,humidity_band,humidity_std,maximum_humidity = process_humidity(date,location)
+    temp_avg,temp_band,temp_std,maximum_temp = process_temp(date,location)
+    return {
+        "Rain": {
+            "Average": rain_avg,
+            "Band": rain_band,
+            "Std": rain_std,
+            "Max": rain_max,
+            "Percentage": percentage_rainfall
+        },
+        "Wind": {
+            "Average": wind_avg,
+            "Band": wind_band,
+            "Std": wind_std,
+            "Max": maximum_wind
+        },
+        "Humidity": {
+            "Average": humidity_avg,
+            "Band": humidity_band,
+            "Std": humidity_std,
+            "Max": maximum_humidity
+        },
+        "Temperature": {
+            "Average": temp_avg,
+            "Band": temp_band,
+            "Std": temp_std,
+            "Max": maximum_temp
+        }
+    }
+    
 if __name__ == '__main__':
     global USERNAME 
     global PASSWORD
@@ -68,8 +155,6 @@ if __name__ == '__main__':
     PASSWORD = "1fy6pJqE401w2OoAK1WR"
     TOKEN = GetData.get_token(username=USERNAME, password=PASSWORD)
 
-    print(GetData.get_lon_lat('London'))
-    print(GetData.get_lon_lat('Miami'))
 
-    print(process_rain(datetime.datetime(2025,12,3),'Canberra'))
+    print(get_full_data_for_date(datetime.datetime(2029,12,3),'Canberra'))
 
