@@ -38,7 +38,7 @@ def get_past_data(date, type,location):
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
         write_test_data(data)
-        data_df = pd.read_csv('data.txt',delimiter=';')
+        data_df = pd.read_csv('/home/data.txt',delimiter=';')
         info_df = pd.concat([info_df,data_df])
     info_df.columns = ["Lat","Lon","Date",type]
 
@@ -55,7 +55,7 @@ def produce_averages(data:pd.DataFrame,type,bins):
     return data, mean,std,maximum,percentage_rainfall
 
 
-def write_test_data(data: str, filename: str="data.txt") -> None:
+def write_test_data(data: str, filename: str="/home/data.txt") -> None:
         with open(filename, "w") as f:
             f.write(data)
 
@@ -163,9 +163,11 @@ def save_graph(data,type):
     plt.show()
 
 def get_day_in_set(data,date):
-    time_data = data['Date']
-    format_date = "%y-%m-%dT%H:%M:%SZ"
-    data['Date'] = data['Date'].map(lambda x: datetime.datetime.strptime(x,format_date))
+    
+    data['Date'] = data['Date'].apply(lambda x: x.replace("T", " "))
+    data['Date'] = data['Date'].apply(lambda x: x.replace("Z",""))
+    format_date = "%y-%m-%d %H:%M:%S"
+    data['Date'] = data['Date'].apply(lambda x: datetime.datetime.strptime(x,format_date))
 
 
 def get_full_data_for_date(date,location):
@@ -177,32 +179,32 @@ def get_full_data_for_date(date,location):
 
     data_list = [rain_data,wind_data,humidity_data,temp_data]
     # for i in data_list: 
-        # get_day_in_set(i,date)
+    #     get_day_in_set(i,date)
 
     return {
         "Rain": {
-            "Average": rain_avg,
-            "Std": rain_std,
-            "Max": rain_max,
-            "Percentage": percentage_rainfall,
+            "Average Rainfall": rain_avg,
+            "Standard Deviation": rain_std,
+            "Maximum Rainfall": rain_max,
+            "Percentage Chance": percentage_rainfall,
             "Classification": rain_classification
         },
         "Wind": {
-            "Average": wind_avg,
-            "Std": wind_std,
-            "Max": maximum_wind,
+            "Average Wind Speed": wind_avg,
+            "Standard Deviation": wind_std,
+            "Maximum Wind Speed": maximum_wind,
             "Classification": wind_classification
         },
         "Humidity": {
-            "Average": humidity_avg,
-            "Std": humidity_std,
-            "Max": maximum_humidity,
+            "Average Humidity": humidity_avg,
+            "Standard Deviation": humidity_std,
+            "Maximum Humidity": maximum_humidity,
             "Classification": humidity_classification
         },
         "Temperature": {
-            "Average": temp_avg,
-            "Std": temp_std,
-            "Max": maximum_temp,
+            "Average Temperature": temp_avg,
+            "Standard Deviation": temp_std,
+            "Maximum Temperature": maximum_temp,
             "Classification": temp_classification
         }
     }

@@ -55,8 +55,8 @@ def create_lon_lat_rectangle(longitude, latitude):
 
 def load_token():
     
-    USERNAME = "lockie_sam"
-    PASSWORD = "1fy6pJqE401w2OoAK1WR"
+    USERNAME = "gurney_nicholas"
+    PASSWORD = "y51m14AbCgT7m4F6l235"
     TOKEN = get_token(username=USERNAME, password=PASSWORD)
     return USERNAME, PASSWORD,TOKEN
 

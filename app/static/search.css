@@ -1,7 +1,7 @@
 /* Copyright 1999-2024. WebPros International GmbH. All rights reserved. */
 html {
     overflow-y: scroll;
-    color: #000;
+    color: darkslategray;
     font: 400 62.5%/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -16,29 +16,42 @@ body {
     margin: 0;
     font-size: 1.3rem;
     background: #fff;
-    color: #000;
+    color: darkslategray;
 }
 a {
     cursor: pointer;
     text-decoration: none;
-    color: #2498e3;
+    color: mediumturquoise;
     background-color: transparent;
 }
 a:active,
 a:hover {
     text-decoration: underline;
-    color: #188dd9;
+    color: midnightblue;
     outline: 0;
 }
 h1,
 h2 {
     margin: 0 0 0.5rem;
-    color: #444;
+    color: darkslategray;
     font-weight: 400;
     line-height: 1;
 }
 h1 { font-size: 2.4rem; }
 h2 { font-size: 3.6rem; }
+
+ul {
+    list-style-type: none;
+    background: darkgoldenrod;
+    padding: 20px;
+}
+
+ul li {
+    background: papayawhip;
+    color: darkslategray;
+    margin: 5px;
+}
+
 .error-code {
     color: #f47755;
     font-size: 8rem;
@@ -68,7 +81,7 @@ hr {
     -webkit-box-flex: 0;
     -ms-flex: 0 1 474px;
     flex: 0 1 474px;
-    background: #38444f url(server.svg) 50% 6em no-repeat;
+    background: royalblue url(server.svg) 50% 6em no-repeat;
     background-size: 44% auto;
 }
 .main {
