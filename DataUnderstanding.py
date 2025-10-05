@@ -73,7 +73,7 @@ def process_rain(date,location):
     data,avg,std,maximum,percentage_rainfall = get_rain_data(date,location)
     band = classify_rain_data(data)
     classification = classify_band(band,'Rain')
-    return avg,band, std,maximum,percentage_rainfall, classification
+    return data,avg,band, std,maximum,percentage_rainfall, classification
 
 
 
@@ -91,7 +91,7 @@ def process_wind(date,location):
     data,avg,std,maximum,percentage_wind = get_wind_data(date,location)
     band = classify_wind_data(data)
     classification = classify_band(band,'Wind')
-    return avg,band,std, maximum, classification
+    return data,avg,band,std, maximum, classification
 
 
 def get_humidity_data(date,location):
@@ -108,7 +108,7 @@ def process_humidity(date,location):
     data,avg,std,maximum,percentage_humidity = get_humidity_data(date,location)
     band = classify_humidity_data(data)
     classification = classify_band(band,'Humidity')
-    return avg,band,std, maximum, classification
+    return data,avg,band,std, maximum, classification
 
 def get_temp_data(date,location):
     data = get_past_data(date,'Temperature',location)
@@ -124,7 +124,7 @@ def process_temp(date,location):
     data,avg,std,maximum,percentage_temperature = get_temp_data(date,location)
     band = classify_temp_data(data)
     classification = classify_band(band,'Temperature')
-    return avg,band, std,maximum, classification
+    return data,avg,band, std,maximum, classification
 
 def fix_date(date: datetime.datetime):
     while date > datetime.datetime.now():

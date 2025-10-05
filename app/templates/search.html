@@ -43,6 +43,12 @@
                             <li class="card_inside">{{ label }} = {{ result }}</li>
                             {% endfor %}
                         </ul>
+                        <h3> Feel </h3>
+                        <ul class="card">
+                            {% for label, result in feel_results.items() %}
+                            <li class="card_inside">{{ label }} = {{ result }}</li>
+                            {% endfor %}
+                        </ul>
                     {% else %}
                         <p class="lead">No results found. Try a different date or location.</p>
                     {% endif %}

@@ -32,7 +32,7 @@ def search():
 	rain_list, temp_list, humidity_list, wind_list = prepare_for_display(data)
 
 	# Renders app/templates/search.html
-	return render_template('search.html', rain_results=rain_list, temp_results=temp_list, humid_results=humidity_list, wind_results=wind_list)
+	return render_template('search.html', rain_results=rain_list, temp_results=temp_list, humid_results=humidity_list, wind_results=wind_list, feel_results=feel_data)
 
 
 def prepare_for_display(data: dict):
@@ -40,13 +40,15 @@ def prepare_for_display(data: dict):
 	temp_data = data['Temperature']
 	humidity_data = data['Humidity']
 	wind_data = data['Wind']
+	feel_data = data['Feel']
+	print(feel_data)
 
 	# rain_list = produce_data_lists(rain_data)
 	# temp_list = produce_data_lists(temp_data)
 	# humitidity_list = produce_data_lists(humidity_data)
 	# wind_list = produce_data_lists(wind_data)
 
-	return rain_data, temp_data, humidity_data, wind_data
+	return rain_data, temp_data, humidity_data, wind_data, feel_data
 
 
 def produce_data_lists(data:dict):
