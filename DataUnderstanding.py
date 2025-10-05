@@ -33,7 +33,6 @@ def get_past_data(date, type,location):
     info_df = pd.DataFrame()
     date = fix_date(date)
     for i in range(5,0,-1):
-        print(i)
         date_for_request = date - datetime.timedelta(days=i*365)
         data = make_request(date_for_request,type,location)
         write_test_data(data)
@@ -155,7 +154,6 @@ def get_full_data_for_date(date,location):
     return {
         "Rain": {
             "Average": rain_avg,
-            "Band": rain_band,
             "Std": rain_std,
             "Max": rain_max,
             "Percentage": percentage_rainfall,
@@ -163,21 +161,18 @@ def get_full_data_for_date(date,location):
         },
         "Wind": {
             "Average": wind_avg,
-            "Band": wind_band,
             "Std": wind_std,
             "Max": maximum_wind,
             "Classification": wind_classification
         },
         "Humidity": {
             "Average": humidity_avg,
-            "Band": humidity_band,
             "Std": humidity_std,
             "Max": maximum_humidity,
             "Classification": humidity_classification
         },
         "Temperature": {
             "Average": temp_avg,
-            "Band": temp_band,
             "Std": temp_std,
             "Max": maximum_temp,
             "Classification": temp_classification
