@@ -148,6 +148,14 @@ def classify_band(band, type):
 def save_graph(data):
     pass
 
+def get_day_in_set(data,date):
+    
+    data['Date'] = data['Date'].apply(lambda x: x.replace("T", " "))
+    data['Date'] = data['Date'].apply(lambda x: x.replace("Z",""))
+    format_date = "%y-%m-%d %H:%M:%S"
+    data['Date'] = data['Date'].apply(lambda x: datetime.datetime.strptime(x,format_date))
+
+
 def get_full_data_for_date(date,location):
     date = fix_date(date)
     rain_data,rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
@@ -156,8 +164,8 @@ def get_full_data_for_date(date,location):
     temp_data,temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
 
     data_list = [rain_data,wind_data,humidity_data,temp_data]
-    for i in data_list: 
-        save_graph(i)
+    # for i in data_list: 
+    #     get_day_in_set(i,date)
 
     return {
         "Rain": {

@@ -18,7 +18,7 @@
                 </header>
 
                 <section class="column">
-                    {% if results %}
+                    {% if rain_results %}
                         <h3> Rain </h3>
                         <ul class="rain_results-list">
                             {% for label, result in rain_results.items() %}
@@ -39,8 +39,13 @@
                         </ul>
                         <h3> Wind </h3>
                         <ul class="wind_results-list">
+<<<<<<< HEAD
                             {% for label, result in humid_results.items() %}
                             <li class="rain_result-card">{{ label }} = {{ result }}</li>
+=======
+                            {% for result in wind_results %}
+                            <li class="rain_result-card">{{ result }}</li>
+>>>>>>> 57268d02f99ca14ff635ed340330e5d00c091899
                             {% endfor %}
                         </ul>
                     {% else %}
