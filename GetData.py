@@ -55,8 +55,8 @@ def create_lon_lat_rectangle(longitude, latitude):
 
 def load_token():
     
-    USERNAME = "gurney_nicholas"
-    PASSWORD = "y51m14AbCgT7m4F6l235"
+    USERNAME = "USERNAME GOES HERE"
+    PASSWORD = "PASSWORD GOES HERE"
     TOKEN = get_token(username=USERNAME, password=PASSWORD)
     return USERNAME, PASSWORD,TOKEN
 
@@ -71,8 +71,6 @@ if __name__ == '__main__':
         
         return lines
     
-    USERNAME = "lockie_sam"
-    PASSWORD = "1fy6pJqE401w2OoAK1WR"
     TOKEN = get_token(username=USERNAME, password=PASSWORD)
     
     #URL = f"https://{USERNAME}:{PASSWORD}@api.meteomatics.com/2020-10-04T00Z--2025-10-04T00Z/precip_24h:mm/51.11,10.2/csv?access_token={TOKEN}"

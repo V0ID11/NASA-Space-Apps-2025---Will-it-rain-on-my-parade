@@ -6,8 +6,7 @@ import pandas as pd
 import csv 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.interpolate import CubicSpline
-import statistics as st
+
 
 
 
@@ -237,7 +236,7 @@ def save_graph(data,type):
     plt.scatter(x_data, y_data, label = type)
     plt.xlabel('Day')
     plt.ylabel(type)
-    type_av = st.mean(y_data)
+    # type_av = st.mean(y_data)
     plt.axhline(y= type_av, color='r', linestyle='--', label= 'Average' +""+ type)
     plt.legend()
     plt.plot(x_data, y_data)
@@ -256,15 +255,11 @@ def get_day_in_set(data,date):
 
 def get_full_data_for_date(date,location):
     date = fix_date(date)
-    rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
-    wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
-    humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
-    temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
     rain_data,rain_avg,rain_band,rain_std,rain_max,percentage_rainfall,rain_classification = process_rain(date,location)
     wind_data,wind_avg,wind_band,wind_std,maximum_wind, wind_classification = process_wind(date,location)
     humidity_data,humidity_avg,humidity_band,humidity_std,maximum_humidity, humidity_classification = process_humidity(date,location)
     temp_data,temp_avg,temp_band,temp_std,maximum_temp, temp_classification = process_temp(date,location)
-
+    
     data_list = [rain_data,wind_data,humidity_data,temp_data]
     # for i in data_list: 
     #     save_graph(i,date, i.columns[2])
@@ -275,29 +270,29 @@ def get_full_data_for_date(date,location):
             "Standard Deviation": rain_std,
             "Maximum Rainfall": rain_max,
             "Percentage Chance": percentage_rainfall,
-            "Classification": rain_classification
+            "Classification": rain_classification[0]
         },
         "Wind": {
             "Average Wind Speed": wind_avg,
             "Standard Deviation": wind_std,
             "Maximum Wind Speed": maximum_wind,
-            "Classification": wind_classification
+            "Classification": wind_classification[0]
         },
         "Humidity": {
             "Average Humidity": humidity_avg,
             "Standard Deviation": humidity_std,
             "Maximum Humidity": maximum_humidity,
-            "Classification": humidity_classification
+            "Classification": humidity_classification[0]
         },
         "Temperature": {
             "Average Temperature": temp_avg,
             "Standard Deviation": temp_std,
             "Maximum Temperature": maximum_temp,
-            "Classification": temp_classification
+            "Classification": temp_classification[0]
         },
         "Feel": {
-            "Danger Level": danger_level,
-            "Comfort Level": comfort_level
+            "Danger Level": get_danger_level(rain_classification[1], wind_classification[1], temp_classification[1]),
+            "Comfort Level": get_comfort_level(rain_classification[0], wind_classification[0], humidity_classification[0], temp_classification[0])
         }
     }
     
@@ -305,8 +300,7 @@ if __name__ == '__main__':
     global USERNAME 
     global PASSWORD
     global TOKEN
-    USERNAME = "lockie_sam"
-    PASSWORD = "1fy6pJqE401w2OoAK1WR"
+
     TOKEN = GetData.get_token(username=USERNAME, password=PASSWORD)
 
 

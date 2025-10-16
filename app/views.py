@@ -29,10 +29,10 @@ def search():
 
 
 	data = DU.get_full_data_for_date(date,location)
-	rain_list, temp_list, humidity_list, wind_list = prepare_for_display(data)
+	rain_list, temp_list, humidity_list, wind_list,feel_list = prepare_for_display(data)
 
 	# Renders app/templates/search.html
-	return render_template('search.html', rain_results=rain_list, temp_results=temp_list, humid_results=humidity_list, wind_results=wind_list, feel_results=feel_data)
+	return render_template('search.html', rain_results=rain_list, temp_results=temp_list, humid_results=humidity_list, wind_results=wind_list, feel_results=feel_list)
 
 
 def prepare_for_display(data: dict):
@@ -41,7 +41,6 @@ def prepare_for_display(data: dict):
 	humidity_data = data['Humidity']
 	wind_data = data['Wind']
 	feel_data = data['Feel']
-	print(feel_data)
 
 	# rain_list = produce_data_lists(rain_data)
 	# temp_list = produce_data_lists(temp_data)
